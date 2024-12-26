@@ -1,20 +1,10 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.decorators import action
-
 from orders.decorator import customer_permission_required
 from .models import Order, Product, PlatformApiCall
 from .serializers import OrderSerializer, ProductSerializer , PlatformApiCallSerializer
-# from django.db.models import Prefetch
-from .tasks import import_products_from_excel #daily_task  # Celery task import
-from functools import wraps
-from django.http import HttpResponseForbidden
-# from rest_framework.decorators import api_view, permission_classes
-from rest_framework import permissions
-from rest_framework import generics
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 
 
 # Order CRUD View
@@ -22,7 +12,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()  
     # queryset = Order.objects.all().select_related('customer').prefetch_related('products')
     serializer_class = OrderSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     @customer_permission_required
     def get_queryset(self):
         customer = self.request.user.customer
@@ -46,9 +36,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [AllowAny]
     # permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs): 
         name = request.data.get('name')
         if Product.objects.filter(name=name).exists():
             return Response({"detail": "Product with this name already exists."}, status=400)

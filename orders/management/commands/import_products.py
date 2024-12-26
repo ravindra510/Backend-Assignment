@@ -1,12 +1,14 @@
-from django.core.management.base import BaseCommand
 import pandas as pd
+from django.core.management.base import BaseCommand
 from orders.models import Product
 
 class Command(BaseCommand):
-    help = 'Import products from Excel file'
+    help = "Import products from an Excel file"
 
     def handle(self, *args, **kwargs):
-        df = pd.read_excel('C:\Users\Rahul\Downloads\product_data.xlsx')
-        for _, row in df.iterrows():
+        file_path = 'C:\Users\Rahul\Downloads\product_data.xlsx'
+        data = pd.read_excel(file_path)
+
+        for _, row in data.iterrows():
             Product.objects.get_or_create(name=row['name'], amount=row['amount'])
-        self.stdout.write(self.style.SUCCESS('Successfully imported products'))
+        self.stdout.write("Products imported successfully!")

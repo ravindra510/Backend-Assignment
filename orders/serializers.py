@@ -30,4 +30,3 @@ class PlatformApiCallSerializer(serializers.ModelSerializer):
         model = PlatformApiCall
         fields = ['id', 'user', 'requested_url', 'requested_data', 'response_data']
 
-
