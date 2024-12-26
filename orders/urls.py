@@ -8,5 +8,5 @@ router.register(r'products', ProductViewSet)
 router.register(r'platform-apicalls', PlatformApiCallViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
 ]

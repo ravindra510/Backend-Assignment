@@ -29,5 +29,10 @@ app.conf.beat_schedule = {
     'import-products-daily': {
         'task': 'orders.tasks.import_products_from_excel',
         'schedule': crontab(hour=14, minute=30),  # 2:30 PM
+
+        # testing perpose 
+        # 'schedule': 10,
+        # 'args':'1111111'
+
     },
 }
